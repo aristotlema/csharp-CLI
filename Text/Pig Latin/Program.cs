@@ -21,23 +21,40 @@ namespace Pig_Latin
         {
             /*Checker();*/
 
-            //To do - fix input to upper
-            Console.WriteLine(PigLatinGenerator("DREDGER"));
+            Console.WriteLine(StringDeconstructor("eat my shorts"));
+
+            Console.WriteLine("What do you want to conver to Pig Latin");
+            string userInput = Console.ReadLine();
+
+            Console.WriteLine(StringDeconstructor(userInput));
+            
             Console.ReadKey();
         }
 
         static string PigLatinGenerator(string input)
         {
+            string upperInput = input.ToUpper();
+
             string generatedWord = "";
             string letterDataStore = "";
             bool foundFirstVowel = false;
+            bool startedWithVowel = false;
 
             Console.WriteLine(input);
 
-            foreach(char letter in input)
+            int count = 1;
+
+            foreach(char letter in upperInput)
             {
+                //If the very first letter is a vowel
+                if(count == 0 && LetterTypeChecker(letter) == false)
+                {
+                    foundFirstVowel = true;
+                    startedWithVowel = true;
+                    generatedWord += letter;
+                }
                 //if letter is a consonant
-                if (LetterTypeChecker(letter) && foundFirstVowel == false)
+                else if (LetterTypeChecker(letter) && foundFirstVowel == false)
                 {
                     letterDataStore += letter;
                 }
@@ -48,8 +65,47 @@ namespace Pig_Latin
                     generatedWord += letter;
                 }    
             }
-            generatedWord += letterDataStore + "ay";
-            return generatedWord;
+
+            if(startedWithVowel)
+            {
+                generatedWord += "yay";
+            }
+            else if(startedWithVowel == false)
+            {
+                generatedWord = generatedWord + letterDataStore + "ay";
+            }
+
+            return generatedWord.ToLower();
+        }
+
+        // TO DO - Issue with returning the last word correctly
+        static string StringDeconstructor(string input)
+        {
+            int count = 0;
+
+            Console.WriteLine(input.Length);
+
+            string currentWord = "";
+            string currentSentance = "";
+            foreach(char letter in input)
+            {
+                
+
+                if (letter == ' ' || count > input.Length)
+                {
+                    currentWord = PigLatinGenerator(currentWord);
+                    currentSentance += currentWord + " ";
+                    currentWord = "";
+                }
+                else if (letter != ' ')
+                {
+
+                    currentWord += letter;
+                }
+
+                count++;
+            }
+            return currentSentance;
         }
 
 
@@ -65,7 +121,7 @@ namespace Pig_Latin
         }
 
 
-        //Just to verify my variables haven't changed
+        //Debug to verify my variables haven't changed
         public static bool Checker()
         {
             int count = 0;
