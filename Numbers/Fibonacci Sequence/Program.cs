@@ -29,24 +29,11 @@ namespace Fibonacci_Sequence
 
         static int fibCalc(int counter)
         {
-            if(counter == 0)
+            if (counter == 0)
                 return 0;
-            if(counter == 1)
+            if (counter == 1)
                 return 1;
-
-
-            int firstNumber = 0;
-            int secondNumber = 1;
-            int result = 0;
-
-            for (var i = 2; i <= counter; i++)
-            {
-                result = firstNumber + secondNumber;
-                firstNumber = secondNumber;
-                secondNumber = result;
-
-            }
-            return result;
+            return fibCalc(counter - 1) + fibCalc(counter - 2);
         }
     }
 }
