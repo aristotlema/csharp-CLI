@@ -30,6 +30,27 @@ namespace Pig_Latin
             
             Console.ReadKey();
         }
+        static string StringDeconstructor(string input)
+        {
+            string currentWord = "";
+            string currentSentance = "";
+
+            for (var i = 0; i < input.Length; i++)
+            {
+                //White space or at the end of string
+                if (input[i] == ' ' || i == input.Length - 1)
+                {
+                    currentWord = PigLatinGenerator(currentWord);
+                    currentSentance += currentWord + " ";
+                    currentWord = "";
+                }
+                else if (input[i] != ' ')
+                {
+                    currentWord += input[i];
+                }
+            }
+            return currentSentance;
+        }
 
         static string PigLatinGenerator(string input)
         {
@@ -40,7 +61,6 @@ namespace Pig_Latin
             bool foundFirstVowel = false;
             bool startedWithVowel = false;
 
-            Console.WriteLine(input);
 
             int count = 1;
 
@@ -78,43 +98,13 @@ namespace Pig_Latin
             return generatedWord.ToLower();
         }
 
-        // TO DO - Issue with returning the last word correctly
-        static string StringDeconstructor(string input)
-        {
-            int count = 0;
-
-            Console.WriteLine(input.Length);
-
-            string currentWord = "";
-            string currentSentance = "";
-            foreach(char letter in input)
-            {
-                
-
-                if (letter == ' ' || count > input.Length)
-                {
-                    currentWord = PigLatinGenerator(currentWord);
-                    currentSentance += currentWord + " ";
-                    currentWord = "";
-                }
-                else if (letter != ' ')
-                {
-
-                    currentWord += letter;
-                }
-
-                count++;
-            }
-            return currentSentance;
-        }
-
-
         public static bool LetterTypeChecker(char letterCheck)
         {
             if (consonant.Contains(letterCheck))
                 return true;
             else if (vowel.Contains(letterCheck))
                 return false;
+            // return false because we do not want to move any characters outside of alphabet
             else
                 Console.WriteLine("A critical error has occured");
                 return false;
