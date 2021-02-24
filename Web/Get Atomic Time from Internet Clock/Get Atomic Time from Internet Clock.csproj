@@ -6,4 +6,8 @@
     <RootNamespace>Get_Atomic_Time_from_Internet_Clock</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+
 </Project>
