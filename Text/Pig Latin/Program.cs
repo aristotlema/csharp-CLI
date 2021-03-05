@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 /*Pig Latin - Pig Latin is a game of alterations played on the English language game. 
  * To create the Pig Latin form of an English word the initial consonant sound is transposed to the end of the word and an ay is affixed (Ex.: "banana" would yield anana-bay). 
@@ -30,26 +32,18 @@ namespace Pig_Latin
             
             Console.ReadKey();
         }
+
         static string StringDeconstructor(string input)
         {
-            string currentWord = "";
-            string currentSentance = "";
+            string[] arrOfStrings = input.Split(' ');
+            List<string> pigLatinOfStrings = new();
 
-            for (var i = 0; i < input.Length; i++)
+            foreach(string word in arrOfStrings)
             {
-                //White space or at the end of string
-                if (input[i] == ' ' || i == input.Length - 1)
-                {
-                    currentWord = PigLatinGenerator(currentWord);
-                    currentSentance += currentWord + " ";
-                    currentWord = "";
-                }
-                else if (input[i] != ' ')
-                {
-                    currentWord += input[i];
-                }
+                pigLatinOfStrings.Add(PigLatinGenerator(word));
             }
-            return currentSentance;
+
+            return string.Join(' ', pigLatinOfStrings);
         }
 
         static string PigLatinGenerator(string input)
@@ -66,12 +60,13 @@ namespace Pig_Latin
 
             foreach(char letter in upperInput)
             {
-                //If the very first letter is a vowel
+                //If the very first letter is a vowel - place a return statement and exit the function here
                 if(count == 0 && LetterTypeChecker(letter) == false)
                 {
                     foundFirstVowel = true;
                     startedWithVowel = true;
-                    generatedWord += letter;
+                    generatedWord = input + "yay";
+                    return generatedWord.ToLower();
                 }
                 //if letter is a consonant
                 else if (LetterTypeChecker(letter) && foundFirstVowel == false)
@@ -86,14 +81,14 @@ namespace Pig_Latin
                 }    
             }
 
-            if(startedWithVowel)
+/*            if(startedWithVowel)
             {
-                generatedWord += "yay";
-            }
-            else if(startedWithVowel == false)
-            {
-                generatedWord = generatedWord + letterDataStore + "ay";
-            }
+                generatedWord += "yay";o
+            }*/
+                 if(startedWithVowel == false)
+                {
+                    generatedWord = generatedWord + letterDataStore + "ay";
+                }
 
             return generatedWord.ToLower();
         }
