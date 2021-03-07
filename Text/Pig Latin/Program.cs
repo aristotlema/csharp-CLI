@@ -21,9 +21,9 @@ namespace Pig_Latin
         public static string consonant = "BCDFGHJKLMNPQRSTVWXZY";
         static void Main(string[] args)
         {
-            /*Checker();*/
+            Checker();
 
-            Console.WriteLine(StringDeconstructor("eat my shorts"));
+            Console.WriteLine(StringDeconstructor("Bananas are good as shoes"));
 
             Console.WriteLine("What do you want to conver to Pig Latin");
             string userInput = Console.ReadLine();
@@ -33,6 +33,7 @@ namespace Pig_Latin
             Console.ReadKey();
         }
 
+        // Splits words into an array of strings and feeds each item into Pig Latin generator
         static string StringDeconstructor(string input)
         {
             string[] arrOfStrings = input.Split(' ');
@@ -42,7 +43,6 @@ namespace Pig_Latin
             {
                 pigLatinOfStrings.Add(PigLatinGenerator(word));
             }
-
             return string.Join(' ', pigLatinOfStrings);
         }
 
@@ -53,83 +53,54 @@ namespace Pig_Latin
             string generatedWord = "";
             string letterDataStore = "";
             bool foundFirstVowel = false;
-            bool startedWithVowel = false;
 
-
-            int count = 1;
-
-            foreach(char letter in upperInput)
+            //If first letter is vowel, return
+            if(LetterTypeChecker(upperInput[0]) == false)
             {
-                //If the very first letter is a vowel - place a return statement and exit the function here
-                if(count == 0 && LetterTypeChecker(letter) == false)
-                {
-                    foundFirstVowel = true;
-                    startedWithVowel = true;
-                    generatedWord = input + "yay";
-                    return generatedWord.ToLower();
-                }
-                //if letter is a consonant
-                else if (LetterTypeChecker(letter) && foundFirstVowel == false)
-                {
-                    letterDataStore += letter;
-                }
-                // if letter is a vowel
-                else if (LetterTypeChecker(letter) == false || foundFirstVowel)
-                {
-                    foundFirstVowel = true;
-                    generatedWord += letter;
-                }    
+                return input.ToLower() + "-yay";
             }
-
-/*            if(startedWithVowel)
+            else
             {
-                generatedWord += "yay";o
-            }*/
-                 if(startedWithVowel == false)
+                // loop throught input word. shave off letters and add to letterDataStore until first vowel is found, then all letters are added to the generated word and returned summed
+                foreach (char letter in upperInput)
                 {
-                    generatedWord = generatedWord + letterDataStore + "ay";
+                    if(LetterTypeChecker(letter) && foundFirstVowel == false)
+                    {
+                        letterDataStore += letter;
+                    }
+                    else if (LetterTypeChecker(letter) == false || foundFirstVowel)
+                    {
+                        foundFirstVowel = true;
+                        generatedWord += letter;
+                    }
+                    else
+                        Console.WriteLine("Out of bounds parameter");
                 }
-
-            return generatedWord.ToLower();
+                return (generatedWord + "-" + letterDataStore + "ay").ToLower();
+            }
         }
-
         public static bool LetterTypeChecker(char letterCheck)
         {
             if (consonant.Contains(letterCheck))
                 return true;
-            else if (vowel.Contains(letterCheck))
+            else if (vowel.ToUpper().Contains(letterCheck))
                 return false;
-            // return false because we do not want to move any characters outside of alphabet
+            // return false because we do not want to move any characters outside of alphabet.
             else
-                Console.WriteLine("A critical error has occured");
+                Console.WriteLine("either a critial error occured, or non-alphabetic character was entered");
                 return false;
         }
-
-
         //Debug to verify my variables haven't changed
-        public static bool Checker()
+        public static void Checker()
         {
             int count = 0;
-            foreach(char letter in vowel)
+            foreach(char letter in vowel) count++;
+            foreach(char letter in consonant) count++;
+            if (count != 26)
             {
-                count++;
+                Console.WriteLine("Variables have been broken");
             }
-            foreach(char letter in consonant)
-            {
-                count++;
-            }
-            Console.WriteLine(count);
-            if (count == 26)
-            {
-                Console.WriteLine("True");
-                return true;
-            }
-            else
-            {
-                Console.WriteLine("False");
-                return false;
-            }
-
+                
         }
     }
 }
