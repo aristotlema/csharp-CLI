@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 /*Company Manager 
  * Create an hierarchy of classes 
@@ -6,6 +7,9 @@
  * Every one's pay is calculated differently, research a bit about it. 
  * 
  * After you've established an employee hierarchy, create a Company class that allows you to manage the employees. 
+ * 
+ * 
+ * Still to DO:
  * You should be able to hire, fire and raise employees.
  
  */
@@ -14,19 +18,52 @@ class Program
 {
     static void Main(string[] args)
     {
-        HourlyEmployee bill = new("Bill", 15);
-        bill.SayHello();
-        SalariedEmployee jeff = new("Jeff", 1500);
-        jeff.SayHello();
-        Manager steven = new("Steven", 3000, 5000);
-        steven.SayHello();
+        Company newrl = new();
+        newrl.EveryoneSayHello();
     }
 }
 
-abstract class Employee
+class Company
+{
+    //To do - clean this up here
+    private List<Employee> employees = new();
+    private List<Employee> Employees { get => employees; set => employees = value; }
+
+    public Company()
+    {
+        var defaultEmployees = new List<Employee>
+        {
+            new HourlyEmployee("Bill", 15),
+            new SalariedEmployee("Jeff", 1500),
+            new Manager("Steven", 3000, 5000)
+        };
+
+        foreach(var employee in defaultEmployees)
+        {
+            Employees.Add(employee);
+        }  
+    }
+    public void EveryoneSayHello()
+    {
+        foreach (var person in Employees)
+        {
+            person.SayHello();
+        }
+    }
+}
+
+interface IEmployee
 {
     public string Name { get; set; }
-
+    public int YearlyPay { get; set; }
+    public string TypeOfEmployee { get; set; }
+    void SayHello();
+    int CalculatePay();
+}
+abstract class Employee : IEmployee
+{
+    public string Name { get; set; }
+    public string TypeOfEmployee { get; set; }
     public int YearlyPay
     {
         get
@@ -41,8 +78,9 @@ abstract class Employee
 
     public void SayHello()
     {
-        Console.WriteLine($"Hi my name is { Name } and I make { YearlyPay } a year");
+        Console.WriteLine($"Hi my name is { Name } and I make { YearlyPay } a year, I work as an {TypeOfEmployee}");
     }
+
     public abstract int CalculatePay();
 }
 
@@ -53,6 +91,8 @@ class HourlyEmployee : Employee
     {
         Name = name;
         HourlyRate = hourlyRate;
+        // todo - Find better solution for this. Shouldnt need to call this in every class
+        TypeOfEmployee = GetType().ToString();
     }
     public override int CalculatePay()
     {
@@ -68,13 +108,13 @@ class SalariedEmployee : Employee
     {
         Name = name;
         WeeklyRate = weeklyRate;
+        TypeOfEmployee = GetType().ToString();
     }
 
     public override int CalculatePay()
     {
         return WeeklyRate * 52;
     }
-
 }
 
 class Manager : Employee
@@ -87,8 +127,8 @@ class Manager : Employee
         Name = name;
         WeeklyRate = weeklyRate;
         YearlyBonus = yearlyBonus;
+        TypeOfEmployee = GetType().ToString();
     }
-
     public override int CalculatePay()
     {
         return (WeeklyRate * 52) + YearlyBonus;
